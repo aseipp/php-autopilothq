@@ -133,6 +133,12 @@ $manager->addRestHook($event, $targetUrl);
 $manager->deleteRestHook($hookId);
 ```
 
+### getAccount
+```php
+$manager->getAccount();
+```
+
+
 ## AutopilotContact
 ---
 ### get value
