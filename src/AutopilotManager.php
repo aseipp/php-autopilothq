@@ -36,6 +36,9 @@ class AutopilotManager
      * @param string $apiHost
      *   Autopilot host URI.
      */
+
+    protected $extraHeaders;
+
     public function __construct($apiKey, $apiHost = null, Client $client = null)
     {
         $this->apiKey = $apiKey;
@@ -44,6 +47,8 @@ class AutopilotManager
         $this->client = (null !== $client)? $client: new Client([
             'base_uri' => $apiHost ?: 'https://api2.autopilothq.com/v1/',
         ]);
+
+
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -470,6 +475,24 @@ class AutopilotManager
         return true;
     }
 
+
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Account Methods
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+    /**
+     * Gets account info
+     * @return array
+     *
+     * @throws AutopilotException
+     */
+    public function getAccount()
+    {
+        $response = $this->apiGet('account');
+
+        return $response;
+    }
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // REQUEST helpers
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -560,10 +583,11 @@ class AutopilotManager
      */
     protected function getApiHeaders()
     {
-        return [
+        $standardHeaders = [
             'autopilotapikey' => $this->apiKey,
             'Content-Type' => 'application/json',
         ];
+        return $standardHeaders;
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
