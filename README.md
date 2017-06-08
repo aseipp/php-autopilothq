@@ -93,6 +93,16 @@ $manager->removeContactFromList($list, $id|$email);
 $manager->checkContactInList($list, $id|$email);
 ```
 
+### getAllSegments
+```php
+$manager->getAllSegments();
+```
+
+### getAllContactsInList
+```php
+$manager->getAllContactsInSegment($segment);
+```
+
 ### allTriggers
 ```php
 $manager->allTriggers();
