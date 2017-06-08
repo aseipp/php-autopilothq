@@ -400,7 +400,7 @@ class AutopilotManager
 
         $segments = [];
         foreach($response['segments'] as $item) {
-            $lists[$item['segment_id']] = $item['title'];
+            $segments[$item['segment_id']] = $item['title'];
         }
         return $segments;
 
