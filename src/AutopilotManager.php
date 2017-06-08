@@ -390,6 +390,62 @@ class AutopilotManager
     }
 
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    // Segment Actions Methods
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
+    public function getAllSegments()
+    {
+        $response = $this->apiGet('smart_segments');
+
+        $segments = [];
+        foreach($response['segments'] as $item) {
+            $lists[$item['segment_id']] = $item['title'];
+        }
+        return $segments;
+
+    }
+
+    public function getAllContactsInSegment($segmentId, $bookmark = null)
+    {
+        $path = 'smart_segments/' . $segmentId . '/contacts';
+        if (! is_null($bookmark)) {
+            $path .= '/' . $bookmark;
+        }
+
+        try {
+
+            $response = $this->apiGet($path);
+
+        } catch (AutopilotException $e) {
+
+            // for some reason Autopilot functionality isn't consistent here
+            if ($e->getMessage() === '') {
+                $e->setMessage('Segment does not exist.');
+                $e->setReason('Not Found');
+                throw $e;
+            } else {
+                throw $e;
+            }
+        }
+
+        $segment = [
+            'total_contacts' => $response['total_contacts'],
+            'contacts'       => [],
+        ];
+
+        if (isset($response['bookmark'])) {
+            $segment['bookmark'] = $response['bookmark'];
+        }
+
+        foreach($response['contacts'] as $data) {
+            $contact = new AutopilotContact($data);
+            $segment['contacts'][] = $contact;
+        }
+
+        return $segment;
+    }
+    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // Journey ACTION methods
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
